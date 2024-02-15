@@ -1,0 +1,29 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "0004bca4723e5f82d3186cd489ff31c2"
+name = "pragmatic-shipping-app"
+handle = "pragmatic-shipping-app-2"
+application_url = "https://documentation-strength-additional-detail.trycloudflare.com"
+embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "quickstart-bf6db4d7.myshopify.com"
+include_config_on_deploy = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_products, read_products, write_draft_orders, read_orders, write_orders, read_customers, write_customers, read_inventory, write_inventory, read_price_rules, write_price_rules, read_discounts, write_discounts"
+
+[auth]
+redirect_urls = [
+  "https://documentation-strength-additional-detail.trycloudflare.com/auth/callback",
+  "https://documentation-strength-additional-detail.trycloudflare.com/auth/shopify/callback",
+  "https://documentation-strength-additional-detail.trycloudflare.com/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2024-01"
+
+[pos]
+embedded = false
