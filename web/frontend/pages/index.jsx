@@ -37,20 +37,29 @@ export default function HomePage() {
 
     const fetchRecommendations = async () => {
         setIsLoading(true);
+        const urlParams = new URLSearchParams(window.location.search);
+        const shop = urlParams.get('shop');
+        const host = urlParams.get('host');
+        if (!shop || !host) {
+            console.error('Shop or host parameter is missing');
+            setIsLoading(false);
+            return;
+        }
+        const url = `/api/recommendations?shop=${shop}&host=${host}`;
         try {
-            const response = await fetch('/api/recommendations');
+            const response = await fetch(url);
             if (!response.ok) throw new Error('Network response was not ok');
             const recommendations = await response.json();
-            console.log(recommendations);
             setRecommendations(recommendations);
-            setIsLoading(false);
+    
         } catch (error) {
             console.error('Failed to fetch recommendations:', error);
-            setIsLoading(false);
             setToastProps({
                 content: t("HomePage.errorFetchingRecommendations"),
                 error: true,        
             });
+        } finally {
+            setIsLoading(false);
         }
     };
 

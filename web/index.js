@@ -8,8 +8,14 @@ import shopify from "./shopify.js";
 import PrivacyWebhookHandlers from "./privacy.js";
 import reccomendationsRouter from './routes/recommendations.js';
 
-const app = express();
+// Initialize Sequelize Setup
+import sequelize from './config/db.js';
+import './models/Product.js';
+import './models/Order.js';
+import './models/OrderItem.js';
+import './models/associations.js';
 
+const app = express();
 app.use(express.json());
 
 const PORT = parseInt(
@@ -35,6 +41,21 @@ app.post(
   shopify.config.webhooks.path,
   shopify.processWebhooks({ webhookHandlers: PrivacyWebhookHandlers })
 );
+
+async function initializeAndStartServer() {
+  try {
+    await sequelize.authenticate();
+    console.log('Database connection has been established successfully.');
+    await sequelize.sync(); // Consider using migrations in production
+    console.log('All models were synchronized successfully.');
+    // Start listening for requests
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+};
+  
+  // Initialize and start the server
+initializeAndStartServer();
 
 //app.use("/api/*", shopify.validateAuthenticatedSession());
 app.use("/api/*", (req, res, next) => {
@@ -66,16 +87,8 @@ app.get("/api/products", async (req, res) => {
   try {
     console.log("Attempting to fetch products...");
     const session = res.locals.shopify.session;
-    if (!session) {
-      console.log("No session found");
-      throw new Error("Session not found");
-    }
-    console.log("Session found:", session);
-
     const { Product } = shopify.api.rest;
     const products = await Product.all({ session });
-
-    console.log("Fetched Products:", JSON.stringify(products, null, 2));
     res.status(200).json(products);
   } catch (error) {
     console.error(`Failed to fetch products: ${error.message}`);
