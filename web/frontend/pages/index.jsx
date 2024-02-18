@@ -10,6 +10,7 @@ import {
   Text,
   Button,
 } from "@shopify/polaris";
+import { Toast } from '@shopify/polaris';
 import { useAppQuery, useAuthenticatedFetch } from "../hooks";
 import { useTranslation } from "react-i18next";
 import { TitleBar } from "@shopify/app-bridge-react";
@@ -63,26 +64,21 @@ export default function HomePage() {
         }
     };
 
-    const fetchProducts = async () => {
-        setIsLoading(true);
-        try {
-        await refetchProducts();
-        setToastProps({
-            content: t("HomePage.productsFetchedSuccess"),
-        });
-    } catch (error) {
-        console.error('Failed to fetch products:', error);
-        setIsLoading(false);
-        setToastProps({
-            content: t("HomePage.errorFetchingProducts"),        
-            error: true,
-        });
-    }
-  };
-
   useEffect(() => {
+    fetchAndSaveData();
     fetchRecommendations();
-    }, []);
+  }, []);
+
+    const fetchAndSaveData = async () => {
+      const url = '/api/test-fetch-save';
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Network response was not ok');
+        console.log("Data fetch and save initiated successfully");
+      } catch (error) {
+        console.error('Failed to initiate data fetch and save:', error);
+      }
+    };
   
   const toastMarkup = toastProps.content && (
     <Toast {...toastProps} onDismiss={() => setToastProps({ content: null })} />

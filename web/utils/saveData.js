@@ -6,11 +6,18 @@ import sequelize from '../config/db.js';
 
 export async function saveProducts(productData) {
     try {
-        const { id, title, category } = productData;
+        const { id, title, vendor, product_type, tags, images } = productData;
+        
+        const primaryImage = images.length > 0 ? images[0] : null;
         await Product.upsert({
             productId: id,
             productName: title,
-            category
+            vendor: vendor,
+            productType: product_type,
+            tags: tags.join(', '),
+            imageUrl: primaryImage ? primaryImage.src : null,
+            imageWidth: primaryImage ? primaryImage.width : null,
+            imageHeight: primaryImage ? primaryImage.height : null,
         });
         console.log(`Product saved or updated: ${title}`)
     } catch (error) {
@@ -32,6 +39,8 @@ export async function saveOrderAndItems(orderData, itemsData) {
         for (const item of itemsData) {
             await OrderItem.create({
                 orderId: order.id,
+                productId: item.productId,
+                quantity: item.quantity,
                 ...item
             }, { transaction });
         }

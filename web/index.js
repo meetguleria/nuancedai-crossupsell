@@ -7,6 +7,8 @@ import serveStatic from "serve-static";
 import shopify from "./shopify.js";
 import PrivacyWebhookHandlers from "./privacy.js";
 import reccomendationsRouter from './routes/recommendations.js';
+import { fetchOrderItemsForRecommendations } from './utils/fetchData.js';
+import { saveProducts } from './utils/saveData.js';
 
 // Initialize Sequelize Setup
 import sequelize from './config/db.js';
@@ -28,8 +30,6 @@ const STATIC_PATH =
     ? `${process.cwd()}/frontend/dist`
     : `${process.cwd()}/frontend/`;
 
-
-
 // Set up Shopify authentication and webhook handling
 app.get(shopify.config.auth.path, shopify.auth.begin());
 app.get(
@@ -37,34 +37,29 @@ app.get(
   shopify.auth.callback(),
   shopify.redirectToShopifyOrAppRoot()
 );
+
 app.post(
   shopify.config.webhooks.path,
   shopify.processWebhooks({ webhookHandlers: PrivacyWebhookHandlers })
 );
 
+  // Initialize and start the server
 async function initializeAndStartServer() {
   try {
     await sequelize.authenticate();
     console.log('Database connection has been established successfully.');
-    await sequelize.sync(); // Consider using migrations in production
-    console.log('All models were synchronized successfully.');
-    // Start listening for requests
+    await sequelize.sync();
+    console.log('All models were synchronised successfully.');
+
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   } catch (error) {
     console.error('Unable to connect to the database:', error);
+    process.exit(1);
   }
-};
-  
-  // Initialize and start the server
-initializeAndStartServer();
+}
 
-//app.use("/api/*", shopify.validateAuthenticatedSession());
-app.use("/api/*", (req, res, next) => {
-    console.log('Validating session for', req.path);
-    next();
-}, shopify.validateAuthenticatedSession(), (req, res, next) => {
-    console.log('Session validated for', req.path);
-    next();
-});
+
+app.use("/api/*", shopify.validateAuthenticatedSession());
 
 // Right after your express.json() middleware
 app.use((req, res, next) => {
@@ -96,6 +91,25 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
+app.get("/api/test-fetch-save", async (req, res) => {
+  console.log("res.locals.shopify:", res.locals.shopify);
+  console.log("Session:", res.locals.shopify?.session);
+
+  try {
+      const session = res.locals.shopify.session;
+      const productsData = await fetchOrderItemsForRecommendations(session);
+
+      for (const productData of productsData) {
+          await saveProducts(productData);
+      }
+
+      res.send("Data fetch and save process initiated. Check console for progress.");
+  } catch (error) {
+      console.error("Error in test-fetch-save route:", error);
+      res.status(500).send("An error occurred during the fetch and save  process.");
+  }
+});
+
 app.use(shopify.cspHeaders());
 app.use(serveStatic(STATIC_PATH, { index: false }));
 
@@ -106,4 +120,5 @@ app.use("/*", shopify.ensureInstalledOnShop(), async (_req, res, _next) => {
     .send(readFileSync(join(STATIC_PATH, "index.html")));
 });
 
-app.listen(PORT);
+initializeAndStartServer()
+//app.listen(PORT);
