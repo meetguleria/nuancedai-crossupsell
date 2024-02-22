@@ -20,10 +20,10 @@ OrderItem.init({
     productId: {
         type: DataTypes.INTEGER,
         references: {
-            model: 'Product',
-            key: 'product_id'
+            model: 'Products',
+            key: 'productId'
         },
         field: 'product_id'
     },
     quantity: DataTypes.INTEGER
-}, { sequelize, modelName: 'OrderItem', tableName: 'OrderItems', timestamps: false });
+}, { sequelize, modelName: 'OrderItem', tableName: 'OrderItems' });

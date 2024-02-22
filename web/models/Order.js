@@ -1,20 +1,31 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
 
-export class Order extends Model {}
+class Order extends Model {}
+
 Order.init({
-    orderId: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        field: 'order_id'
-    },
-    customerId: {
-        type: DataTypes.STRING,
-        field: 'customer_id'
-    },
-    orderDate: {
-        type: DataTypes.DATE,
-        field: 'order_date'
-    }
-}, { sequelize, modelName: 'Order', tableName: 'Orders', timestamps: false });
+  buyerAcceptsMarketing: {
+    type: DataTypes.BOOLEAN,
+    field: 'buyer_accepts_marketing',
+    defaultValue: false
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    field: 'created_at'
+  },
+  currency: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  currentTotalPrice: {
+    type: DataTypes.DECIMAL(10, 2),
+    field: 'current_total_price',
+    allowNull: false
+  }
+}, {
+  sequelize,
+  modelName: 'Order',
+  tableName: 'orders',
+});
+
+export default Order;

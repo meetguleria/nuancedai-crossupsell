@@ -14,4 +14,4 @@ Product.init({
         field: 'product_name'
     },
     category: DataTypes.STRING
-}, { sequelize, modelName: 'Product', tableName: 'Products', timestamps: false });
+}, { sequelize, modelName: 'Product', tableName: 'Products' });

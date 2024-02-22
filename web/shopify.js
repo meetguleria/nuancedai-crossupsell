@@ -1,10 +1,26 @@
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
 import { BillingInterval, LATEST_API_VERSION } from "@shopify/shopify-api";
-import Shopify, { ApiVersion } from '@shopify/shopify-api';
 import { shopifyApp } from "@shopify/shopify-app-express";
-import { SQLiteSessionStorage } from "@shopify/shopify-app-session-storage-sqlite";
-import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
+import { restResources } from "@shopify/shopify-api/rest/admin/2024-01";
+import { PostgreSQLSessionStorage } from "@shopify/shopify-app-session-storage-postgresql";
 
-const DB_PATH = `${process.cwd()}/database.sqlite`;
+// Convert the import.meta.url to a file path
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Specify the path to your .env file, relative to the current file
+dotenv.config({ path: resolve(__dirname, '../.env') });
+
+const DATABASE_NAME = process.env.DATABASE_NAME;
+const DATABASE_USERNAME = process.env.DATABASE_USERNAME;
+const DATABASE_PASSWORD = encodeURIComponent(process.env.DATABASE_PASSWORD);
+const DATABASE_HOST = process.env.DATABASE_HOST;
+
+const postgresSessionStorage = new PostgreSQLSessionStorage(
+  `postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@${DATABASE_HOST}/${DATABASE_NAME}`
+);
 
 // The transactions with Shopify will always be marked as test transactions, unless NODE_ENV is production.
 // See the ensureBilling helper to learn more about billing in this template.
@@ -16,8 +32,6 @@ const billingConfig = {
     interval: BillingInterval.OneTime,
   },
 };
-
-const client = new Shopify.Clients.Graphql(session.shop, session.accessToken);
 
 const shopify = shopifyApp({
   api: {
@@ -33,7 +47,7 @@ const shopify = shopifyApp({
     path: "/api/webhooks",
   },
   // This should be replaced with your preferred storage strategy
-  sessionStorage: new SQLiteSessionStorage(DB_PATH),
+  sessionStorage: postgresSessionStorage,
 });
 
 export default shopify;
