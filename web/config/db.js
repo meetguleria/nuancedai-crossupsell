@@ -1,14 +1,5 @@
-import dotenv from 'dotenv';
+import './env.js';
 import { Sequelize } from 'sequelize';
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
-
-// Convert the import.meta.url to a file path
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// Specify the path to your .env file, relative to the current file
-dotenv.config({ path: resolve(__dirname, '../../.env') });
 
 const DATABASE_NAME = process.env.DATABASE_NAME;
 const DATABASE_USERNAME = process.env.DATABASE_USERNAME;

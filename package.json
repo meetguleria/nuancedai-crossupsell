@@ -14,7 +14,7 @@
   "dependencies": {
     "@shopify/app": "^3.56.1",
     "@shopify/cli": "^3.56.1",
-    "dotenv": "^16.4.4"
+    "dotenv": "^16.4.5"
   },
   "author": "meetg",
   "private": true,

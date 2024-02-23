@@ -1,17 +1,8 @@
-import dotenv from 'dotenv';
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
+import './config/env.js'
 import { BillingInterval, LATEST_API_VERSION } from "@shopify/shopify-api";
 import { shopifyApp } from "@shopify/shopify-app-express";
 import { restResources } from "@shopify/shopify-api/rest/admin/2024-01";
 import { PostgreSQLSessionStorage } from "@shopify/shopify-app-session-storage-postgresql";
-
-// Convert the import.meta.url to a file path
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// Specify the path to your .env file, relative to the current file
-dotenv.config({ path: resolve(__dirname, '../.env') });
 
 const DATABASE_NAME = process.env.DATABASE_NAME;
 const DATABASE_USERNAME = process.env.DATABASE_USERNAME;

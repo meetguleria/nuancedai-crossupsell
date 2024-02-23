@@ -1,5 +1,4 @@
-import dotenv from 'dotenv';
-dotenv.config();
+import './config/env.js';
 import { join } from "path";
 import { readFileSync } from "fs";
 import express from "express";
