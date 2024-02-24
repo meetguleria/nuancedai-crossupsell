@@ -14,10 +14,7 @@ query getProducts {
 `;
 
 export async function fetchProducts(session) {
-  if (!session || !session.accessToken || !session.shop) {
-    console.error('Invalid session object:', session);
-    throw new Error("Session object is missing required properties.");
-  }
+    
   const client = new shopify.api.clients.Graphql({ session });
 
   try {
