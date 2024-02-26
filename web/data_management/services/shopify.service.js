@@ -1,12 +1,15 @@
-import shopify from '../shopify.js';
+import shopify from '../../shopify.js';
 
 const GET_PRODUCTS_QUERY = `
-query getProducts {
-  products(first: 3) {
+query getProducts($first: Int = 250) {
+  products(first: $first) {
     edges {
       node {
         id
         title
+        bodyHtml
+        vendor
+        productType
       }
     }
   }
@@ -29,7 +32,7 @@ export async function fetchProducts(session) {
       console.error('GraphQL Errors:', response.body.errors);
       throw new Error('GraphQL query failed');
     }
-
+    
     return response.body.data.products.edges.map(edge => edge.node);
   } catch (error) {
     console.error('Failed to fetch products:', error);

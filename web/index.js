@@ -6,9 +6,10 @@ import shopify from "./shopify.js";
 import PrivacyWebhookHandlers from "./privacy.js";
 
 import { fetchProducts } from './services/shopifyService.js';
+import  shopifyRoutes from './routes/shopifyRoutes.js';
+import productRoutes from './routes/productRoutes.js';
 
 const app = express();
-
 const PORT = parseInt(
   process.env.BACKEND_PORT || process.env.PORT || "3000",
   10
@@ -50,8 +51,11 @@ app.get('/api/products', async (req, res) => {
     }
 });
 
+app.use('/api/shopify', shopifyRoutes);
+app.use('/api', productRoutes);
 app.use(shopify.cspHeaders());
 
+app.use
 app.use("/*", shopify.ensureInstalledOnShop(), async (_req, res, _next) => {
   return res
     .status(200)

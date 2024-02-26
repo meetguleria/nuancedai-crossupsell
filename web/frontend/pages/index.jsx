@@ -14,7 +14,7 @@ export default function HomePage() {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-        const response = await fetch('/api/products');
+        const response = await fetch('/api/shopify/fetch-and-save-products')
         const data = await response.json();
         console.log(data);
         setProducts(data);
@@ -44,7 +44,7 @@ export default function HomePage() {
           <Layout.Section>
           <Card sectioned>
             <Text spacing="loose">
-\              {t("HomePage.heading")}
+             {t("HomePage.heading")}
               {t("HomePage.welcomeMessage")}
               <Button onClick={handleStartGuide}>{t("HomePage.startGuideButtonText")}</Button>
             </Text>

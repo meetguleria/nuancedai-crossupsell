@@ -3,6 +3,6 @@ import { handleFetchAndSaveProducts } from '../controllers/productController.js'
 
 const router = express.Router();
 
-router.get('/fetch-and-save-products', handleFetchAndSaveProducts);
+router.get('/fetch-products', handleFetchAndSaveProducts);
 
 export default router;

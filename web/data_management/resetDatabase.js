@@ -1,5 +1,5 @@
 import sequelize from '../config/db.js';
-import './Order.js';
+import './product.model.js';
 
 sequelize.drop().then(() => {
     console.log('All tables dropped.');

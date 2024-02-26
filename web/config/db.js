@@ -6,6 +6,8 @@ const DATABASE_USERNAME = process.env.DATABASE_USERNAME;
 const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD;
 const DATABASE_HOST = process.env.DATABASE_HOST;
 
+console.log(DATABASE_USERNAME);
+
 const sequelize = new Sequelize(
   DATABASE_NAME, 
   DATABASE_USERNAME,
