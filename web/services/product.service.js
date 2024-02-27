@@ -1,4 +1,4 @@
-import shopify from '../../../shopify.js';
+import shopify from '../shopify.js';
 import Product from '../models/product.model.js';
 
 const GET_PRODUCTS_QUERY = `

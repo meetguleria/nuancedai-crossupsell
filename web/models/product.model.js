@@ -64,4 +64,4 @@ Product.init({
   underscored: true, // Use snake_case rather than camelCase for database attributes
 });
 
-module.exports = Product;
+export default Product;

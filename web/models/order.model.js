@@ -1,5 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../../../config/db.js';
+import sequelize from '../config/db.js';
 
 class Order extends Model {}
 
@@ -15,7 +15,7 @@ Order.init({
     },
     total_price: {
         type: DataTypes.DECIMAL(10, 2),
-        allowNul: false,
+        allowNull: false,
     },
     customer_id: {
         type: DataTypes.UUID,
@@ -31,9 +31,9 @@ Order.init({
     },
     shipping_country: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
     },
-    created_at: {
+    shopify_created_at: {
         type: DataTypes.DATE,
         allowNull: false,
     },

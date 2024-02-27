@@ -3,7 +3,7 @@
 client_id = "0004bca4723e5f82d3186cd489ff31c2"
 name = "pragmatic-shipping-app"
 handle = "pragmatic-shipping-app-2"
-application_url = "https://constant-embassy-actions-anticipated.trycloudflare.com"
+application_url = "https://administrators-mercedes-timely-physicians.trycloudflare.com"
 embedded = true
 
 [build]
@@ -13,13 +13,13 @@ include_config_on_deploy = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "read_customers,read_discounts,read_inventory,read_orders,read_price_rules,read_products,write_customers,write_discounts,write_draft_orders,write_inventory,write_orders,write_price_rules,write_products"
+scopes = "read_customers,read_discounts,read_inventory,read_orders,read_price_rules,read_products,write_customers,write_discounts,write_draft_orders,write_inventory,write_orders,write_price_rules,write_products,read_marketplace_orders"
 
 [auth]
 redirect_urls = [
-  "https://constant-embassy-actions-anticipated.trycloudflare.com/auth/callback",
-  "https://constant-embassy-actions-anticipated.trycloudflare.com/auth/shopify/callback",
-  "https://constant-embassy-actions-anticipated.trycloudflare.com/api/auth/callback"
+  "https://administrators-mercedes-timely-physicians.trycloudflare.com/auth/callback",
+  "https://administrators-mercedes-timely-physicians.trycloudflare.com/auth/shopify/callback",
+  "https://administrators-mercedes-timely-physicians.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

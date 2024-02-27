@@ -49,33 +49,37 @@ async function fetchOrders(session) {
       financial_status: edge.node.financialStatus,
       fulfillment_status: edge.node.fulfillmentStatus,
       currency_code: edge.node.currencyCode,
+      custormer_id: edge.node.customer?.id,
+      shipping_city: edge.node.shippingAddress?.city,
+      shipping_country: edge.node.shippingAddress?.country,
+    }));
+} catch (error) {
+  console.error('Failed to fetch orders:', error);
+  throw error;
+  }
+}
 
-    }))
-        //Check if order already exitsts
-        const existingOrder = await Order.findOne({ where: { shopify_order_id: orderData.id } });
+async function saveOrUpdatedOrders(ordersData) {
+  try {
+    for (const order of ordersData) {
+      const [existing, created] = await Order.findOrCreate({
+        where: { shopify_order_id: order.shopify_order_id },
+        default: order,
+      });
 
-        if (existingOrder) {
-            await existingOrder.update({
-                total_price: orderData.totalPrice,
-                customer_id: orderData.customerId,
-                shipping_city: orderData.shippingAddress ? orderData.shippingAddress.city : null,
-                shipping_country: orderData.shippingAddress ? orderData.shippingAddress.country : null,
-                created_at: new Date(orderData.createdAt),
-            });
-        } else {
-            await Order.create({
-                shopify_order_id: orderData.id,
-                total_price: orderData.totalPrice,
-                customer_id: orderData.customerId,
-                shipping_city: orderData.shippingAddress ? orderData.shippingAddress.city : null,
-                shipping_country: orderData.shippingAddress ? orderData.shippingAddress.country : null,
-                created_at: new Date(orderData.createdAt),
-            });
-        }
-
-        console.log('Order processed successfully.');
-    } catch (error) {
-        console.error('Failed to save or update order:', error);
-        throw error;
+      if (!created) {
+        await existing.update(order);
+      }
     }
+    console.log('Order saved/updated successfully.');
+  } catch (error) {
+    console.error('Error saving/updating orders:', error);
+    throw error;
+  }
+}
+
+export async function processOrders(session) {
+  const ordersData = await fetchOrders(session);
+  await saveOrUpdatedOrders(ordersData);
+  console.log('Complete process of fetching and saving orders finished successfully.');
 }
