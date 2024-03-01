@@ -1,29 +1,39 @@
 import shopify from '../../../shopify.js';
 import Order from './order.model.js';
-import { saveOrderItems } from './orderItem.service.js';
 
 const GET_ORDERS_QUERY = `
 query getOrders($first: Int = 250) {
-    orders(first: $first) {
-        edges {
-            node {
+  orders(first: $first) {
+    edges {
+      node {
+        id
+          lineItems(first: 250) {
+            edges {
+              node {
                 id
-                name
-                totalPrice
-                createdAt: orderCreatedAt
-                financialStatus
-                fulfillmentStatus
-                currencyCode
-                customer {
-                    id
-                }
-                shippingAddress {
-                    city
-                    country
-                }
+                title
+                variantId
+                quantity
+                price
+              }
             }
+          }
+        name
+        totalPrice
+        createdAt: orderCreatedAt
+        financialStatus
+        fulfillmentStatus
+        currencyCode
+        customer {
+          id
         }
+      shippingAddress {
+        city
+        country
+        }
+      }
     }
+  }
 }`;
 
 async function fetchOrders(session) {
@@ -49,7 +59,7 @@ async function fetchOrders(session) {
       financial_status: edge.node.financialStatus,
       fulfillment_status: edge.node.fulfillmentStatus,
       currency_code: edge.node.currencyCode,
-      custormer_id: edge.node.customer?.id,
+      customer_id: edge.node.customer?.id,
       shipping_city: edge.node.shippingAddress?.city,
       shipping_country: edge.node.shippingAddress?.country,
     }));

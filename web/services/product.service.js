@@ -32,6 +32,7 @@ query getProducts($first: Int = 250) {
 
 export async function fetchProducts(session) {
   const client = shopify.api.clients.Graphql({ session });
+  let productsData = [];
 
   try {
     const response = await client.query({
@@ -47,7 +48,7 @@ export async function fetchProducts(session) {
         throw new Error('GraphQL query failed');
       }
 
-      const productsData = response.body.data.products.edges.map(edge => ({
+      productsData = response.body.data.products.edges.map(edge => ({
         shopify_product_id: edge.node.id,
         title: edge.node.title,
         description: edge.node.bodyHtml,
@@ -64,6 +65,7 @@ export async function fetchProducts(session) {
         console.error('Failed to fetch products:', error);
         throw error;
     }
+    return productsData;
 }
 
 async function saveOrUpdateProducts(productsData) {
@@ -77,6 +79,7 @@ async function saveOrUpdateProducts(productsData) {
         console.error('Error saving/updating products:', error);
         throw error;
     }
+    return productsData;
 }
 
 export async function processProducts(session) {

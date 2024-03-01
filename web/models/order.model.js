@@ -18,24 +18,20 @@ Order.init({
         allowNull: false,
     },
     customer_id: {
-        type: DataTypes.UUID,
-        allowNull: true,
-        references: {
-            model: 'customers',
-            key: 'id',
-        },
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'customers',
+          key: 'id',
+      },
     },
-    shipping_city: {
-        type: DataTypes.STRING,
-        allowNull: true,
+    line_items: {
+      type: DataTypes.JSONB,
+      allowNull: true,
     },
-    shipping_country: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    shopify_created_at: {
-        type: DataTypes.DATE,
-        allowNull: false,
+    order_status: {
+      type: DataTypes.JSONB,
+      allowNull: true
     },
 }, {
     sequelize,
