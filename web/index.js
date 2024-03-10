@@ -6,9 +6,11 @@ import shopify from "./shopify.js";
 import PrivacyWebhookHandlers from "./privacy.js";
 
 import { fetchProducts } from './services/shopifyService.js';
+import storeRoutes from './routes/storeRoutes.js';
 import  shopifyRoutes from './routes/shopifyRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
+
 
 const app = express();
 const PORT = parseInt(
@@ -52,6 +54,7 @@ app.get('/api/products', async (req, res) => {
     }
 });
 
+app.use('/api/stores', storeRoutes);
 app.use('/api/orders', orderRoutes);
 
 app.use('/api/shopify', shopifyRoutes);

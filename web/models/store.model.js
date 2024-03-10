@@ -6,7 +6,7 @@ class Store extends Model {}
 Store.init({
   userId: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
     references: {
       model: 'users',
       key: 'id',
@@ -21,13 +21,17 @@ Store.init({
     type: DataTypes.STRING,
     allowNull: false,
   },
-  access_token: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
   myshopify_domain: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  primary_domain_url: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  shopify_store_email: {
+    type: DataTypes.STRING,
+    allowNull: true,
   },
   billing_status: {
     type: DataTypes.ENUM('active', 'trial', 'cancelled'),

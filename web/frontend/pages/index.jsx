@@ -44,8 +44,8 @@ export default function HomePage() {
           <Layout.Section>
           <Card sectioned>
             <Text spacing="loose">
-             {t("HomePage.heading")}
-              {t("HomePage.welcomeMessage")}
+              {t("HomePage.heading")}
+                {t("HomePage.welcomeMessage")}
               <Button onClick={handleStartGuide}>{t("HomePage.startGuideButtonText")}</Button>
             </Text>
           </Card>
