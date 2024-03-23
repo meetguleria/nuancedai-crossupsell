@@ -2,34 +2,35 @@ import Store from '../models/store.model.js';
 import shopify from '../shopify.js';
 
 const GET_SHOP_DETAILS_QUERY = `
-query{
+query {
   shop {
-    id
     name
-    email
-    myshopifyDomain
     primaryDomain {
       url
+      host
     }
-    currencyCode
-    timezone
   }
 }`;
 
 export const fetchShopifyShopDetails = async (session) => {
-  const client = shopify.api.clients.Graphql({ session });
-
   try {
-    const response = await client.query({
-      data: { query: GET_SHOP_DETAILS_QUERY },
+    const client = new shopify.api.clients.Graphql({ session });
+    
+    const response = await client.request(GET_SHOP_DETAILS_QUERY, {
+      variables: {},
     });
 
-    if (response.body.errors) {
-      console.error('GraphQL Errors:', response.body.errors);
+    if (response.errors) {
+      console.error('GraphQL Errors:', response.errors);
       throw new Error('GraphQL query failed');
+    } else if (response.data && response.data.shop) {
+      console.log('Shop Details Data:', response.data.shop);
+      console.log('Shop Name:', response.data.shop.name);
+      return response.data.shop;
+    } else {
+      console.log('Unexpected GraphQL response structure:', response);
+      throw new Error('Unexpected GraphQL response structure');
     }
-
-    return response.body.data.shop;
   } catch (error) {
     console.error('Error fetching shop details:', error);
     throw error;
@@ -62,4 +63,20 @@ export const processAndSaveShopDetails = async (session) => {
     console.log('New store created with shop details.');
   }
   return store;
+};
+
+export async function linkUserWithStore(shopifyStoreId, userId) {
+  try {
+    const store = await Store.findOne({ where: { shopify_store_id: shopifyStoreId } });
+
+    if (store) {
+      await store.update({ userId });
+      console.log(`Store ${shopifyStoreId} linked to user ${userId} successfully.`);
+    } else {
+      console.error(`Store with Shopify ID ${shopifyStoreId} not found.`);
+    } 
+  } catch (error) {
+    console.error(`Error linking store to user: ${error}`);
+    throw error;
+  }
 };

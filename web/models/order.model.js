@@ -17,14 +17,14 @@ Order.init({
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
     },
-    customer_id: {
-      type: DataTypes.UUID,
-      allowNull: true,
-      references: {
-        model: 'customers',
-          key: 'id',
-      },
-    },
+    // customer_id: {
+    //   type: DataTypes.UUID,
+    //   allowNull: true,
+    //   references: {
+    //     model: 'customers',
+    //       key: 'id',
+    //   },
+    // },
     line_items: {
       type: DataTypes.JSONB,
       allowNull: true,
