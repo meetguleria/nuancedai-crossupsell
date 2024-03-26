@@ -4,7 +4,7 @@ import sequelize from '../config/db.js';
 class Store extends Model {}
 
 Store.init({
-  userId: {
+  user_id: {
     type: DataTypes.INTEGER,
     allowNull: true,
     references: {
@@ -33,9 +33,9 @@ Store.init({
     type: DataTypes.STRING,
     allowNull: true,
   },
-  billing_status: {
-    type: DataTypes.ENUM('active', 'trial', 'cancelled'),
-    defaultValue: 'trial',
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
   installed_at: {
     type: DataTypes.DATE,

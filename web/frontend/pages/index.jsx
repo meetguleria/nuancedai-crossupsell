@@ -6,7 +6,7 @@ export default function HomePage() {
   const fetch = useAuthenticatedFetch();
 
   useEffect(() => {
-    fetch("/api/stores/store")
+    fetch("/api/setup/initial-setup")
       .then((response) => response.json())
       .then((data) => console.log(data))
       .catch((error) => console.log('Error fetching store details:', error));

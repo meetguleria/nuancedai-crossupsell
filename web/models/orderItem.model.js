@@ -1,48 +1,53 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/db.js';
-import Order from './order.model.js';
+import { Model, DataTypes } from "sequelize";
+import sequelize from "../config/db.js";
 
 class OrderItem extends Model {}
 
-OrderItem.init({
+OrderItem.init(
+  {
     id: {
-        type: DataTypes.STRING,
-        primaryKey: true,
-        allowNull: false,
-        validate: {
-            notEmpty: true,
-        },
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      allowNull: false,
+      autoIncrement: true,
+    },
+    shopify_item_id: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
     },
     order_id: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        references: {
-            model: 'orders',
-            key: 'shopify_order_id',
-        },
+      type: DataTypes.STRING,
+      allowNull: false,
+      references: {
+        model: "orders",
+        key: "id",
+      },
     },
     title: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     variant_id: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     quantity: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
     price: {
-        type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
     },
-}, {
+  },
+  {
     sequelize,
-    modelName: 'OrderItem',
-    tableName: 'order_items',
+    modelName: "OrderItem",
+    tableName: "order_items",
     timestamps: true,
     underscored: true,
-});
+  }
+);
 
 export default OrderItem;

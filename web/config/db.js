@@ -13,13 +13,18 @@ const sequelize = new Sequelize(
   DATABASE_USERNAME,
   DATABASE_PASSWORD,
     {
-        host: DATABASE_HOST,
+      host: DATABASE_HOST,
       dialect: 'postgres',
-      port: 5432
+      port: 5432,
+      logging: console.log,
 });
 
 sequelize.authenticate()
-  .then(() => console.log('Connection has been established successfully.'))
+.then(() => {
+  console.log('Connection has been established successfully.');
+  // Test query to check logging
+  sequelize.query('SELECT NOW();').then(() => console.log('Query executed')).catch(console.error);
+})
   .catch(error => console.error('Unable to connect to the database:', error));
 
 export default sequelize;

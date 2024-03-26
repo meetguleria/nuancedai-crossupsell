@@ -4,10 +4,12 @@ import shopify from '../shopify.js';
 const GET_SHOP_DETAILS_QUERY = `
 query {
   shop {
+    id
+    email
     name
+    myshopifyDomain
     primaryDomain {
       url
-      host
     }
   }
 }`;
@@ -15,7 +17,6 @@ query {
 export const fetchShopifyShopDetails = async (session) => {
   try {
     const client = new shopify.api.clients.Graphql({ session });
-    
     const response = await client.request(GET_SHOP_DETAILS_QUERY, {
       variables: {},
     });
@@ -23,46 +24,54 @@ export const fetchShopifyShopDetails = async (session) => {
     if (response.errors) {
       console.error('GraphQL Errors:', response.errors);
       throw new Error('GraphQL query failed');
-    } else if (response.data && response.data.shop) {
-      console.log('Shop Details Data:', response.data.shop);
-      console.log('Shop Name:', response.data.shop.name);
+    }
+
+    if (response.data && response.data.shop) {
       return response.data.shop;
     } else {
-      console.log('Unexpected GraphQL response structure:', response);
-      throw new Error('Unexpected GraphQL response structure');
+      console.error('Unexpected GraphQL response structure:', JSON.stringify(response));
+      throw new Error('Unexpected GraphQL response structure, data missing');
     }
   } catch (error) {
-    console.error('Error fetching shop details:', error);
+    console.error('Error fetching shop details:', error.message);
     throw error;
   }
 };
 
 export const processAndSaveShopDetails = async (session) => {
+  console.log('Starting processAndSaveShopDetails...');
+
   const shopDetails = await fetchShopifyShopDetails(session);
 
-  const [store, created] = await Store.findOrCreate({
-    where: { shopify_domain: shopDetails.myshopifyDomain },
-    defaults: {
-      shopify_store_id: shopDetails.id,
-      shopify_domain: shopDetails.myshopifyDomain,
-      shopify_store_email: shopDetails.email,
-      primary_domain_url: shopDetails.primaryDomain.url,
-      shopify_currency_code: shopDetails.currencyCode,
-      shopify_store_timezone: shopDetails.timezone,
-    }
-  });
+  console.log('Fetched shop details:', shopDetails);
 
-  if (!created) {
-    await store.update({
-      shopify_store_id: shopDetails.id,
-      primary_domain_url: shopDetails.primaryDomain.url,
-      shopify_store_email: shopDetails.email,
+  try {
+    console.log('Attempting to save shop details to db:', shopDetails);
+    const [store, created] = await Store.findOrCreate({
+      where: { shopify_domain: shopDetails.myshopifyDomain },
+      defaults: {
+        shopify_store_id: shopDetails.id,
+        myshopify_domain: shopDetails.myshopifyDomain,
+        primary_domain_url: shopDetails.primaryDomain.url,
+        shopify_store_email: shopDetails.email,
+        name: shopDetails.name,
+      }
     });
-    console.log('Store updated with new shop details.');
-  } else {
-    console.log('New store created with shop details.');
+    console.log(created ? 'New store created.' : 'Found existing store, updating.', store.toJSON());
+
+    if (!created) {
+      await store.update({
+        shopify_store_id: shopDetails.id,
+        primary_domain_url: shopDetails.primaryDomain.url,
+        shopify_store_email: shopDetails.email,
+      })
+      console.log('Store update successful:', store.toJSON());
+    }
+    return store.get({ plain: true });
+  } catch (error) {
+    console.error('Error during database operation:', error);
+    throw error;
   }
-  return store;
 };
 
 export async function linkUserWithStore(shopifyStoreId, userId) {

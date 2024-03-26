@@ -6,6 +6,7 @@ import shopify from "./shopify.js";
 import PrivacyWebhookHandlers from "./privacy.js";
 
 import storeRoutes from './routes/storeRoutes.js';
+import initialSetupRoutes from './routes/initialSetupRoutes.js';
 
 const app = express();
 const PORT = parseInt(
@@ -33,6 +34,7 @@ app.use(express.static(STATIC_PATH));
 app.use("/api/*", shopify.validateAuthenticatedSession());
 app.use(express.json());
 
+app.use('/api/setup', initialSetupRoutes);
 app.use('/api/stores', storeRoutes);
 
 app.use(shopify.cspHeaders());

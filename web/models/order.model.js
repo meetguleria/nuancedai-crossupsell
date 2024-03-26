@@ -1,44 +1,44 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/db.js';
+import { Model, DataTypes } from "sequelize";
+import sequelize from "../config/db.js";
 
 class Order extends Model {}
 
-Order.init({
+Order.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     shopify_order_id: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-        primaryKey: true,
-        validate: {
-            notEmpty: true,
-        },
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
     },
     total_price: {
-        type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
     },
-    // customer_id: {
-    //   type: DataTypes.UUID,
-    //   allowNull: true,
-    //   references: {
-    //     model: 'customers',
-    //       key: 'id',
-    //   },
-    // },
-    line_items: {
-      type: DataTypes.JSONB,
+    customer_id: {
+      type: DataTypes.INTEGER,
       allowNull: true,
+      references: {
+        model: "shop_customers",
+        key: "id",
+      },
     },
     order_status: {
       type: DataTypes.JSONB,
-      allowNull: true
+      allowNull: true,
     },
-}, {
+  },
+  {
     sequelize,
-    modelName: 'Order',
-    tableName: 'orders',
+    modelName: "Order",
+    tableName: "orders",
     timestamps: true,
     underscored: true,
-});
+  }
+);
 
 export default Order;
