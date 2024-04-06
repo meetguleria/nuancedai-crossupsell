@@ -5,11 +5,6 @@ class Order extends Model {}
 
 Order.init(
   {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
     shopify_order_id: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -20,7 +15,7 @@ Order.init(
       allowNull: false,
     },
     customer_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: true,
       references: {
         model: "shop_customers",

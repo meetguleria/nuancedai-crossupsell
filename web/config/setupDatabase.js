@@ -1,3 +1,4 @@
+import './env.js';
 import sequelize from './db.js';
 import { Order, OrderItem, Product, Store, User, ShopCustomer } from '../models/index.js';
 

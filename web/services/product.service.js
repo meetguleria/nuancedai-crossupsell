@@ -31,11 +31,11 @@ query getProducts($first: Int = 250) {
 }`;
 
 export async function fetchProducts(session) {
-  const client = shopify.api.clients.Graphql({ session });
+  const client = new shopify.api.clients.Graphql({ session });
   let productsData = [];
 
   try {
-    const response = await client.query({
+    const response = await client.request({
       data: 
         {
           query: GET_PRODUCTS_QUERY,

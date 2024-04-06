@@ -5,14 +5,14 @@ export async function saveOrderItems(orderId, lineItems) {
     id: item.id,
     order_id: orderId,
     title: item.title,
-    variant_id: item.variantId,
+    variant_id: item.variant?.id,
     quantity: item.quantity,
-    price: item.price,
+    price: item.originalTotalSet?.shopMoney?.amount,
   }));
 
   try {
     await OrderItem.bulkCreate(formattedItems, {
-      updatedOnDuplicate: ['title', 'variant_id', ]
+      updateOnDuplicate: ['title', 'variant_id', 'quantity', 'price'],
     });
     console.log('Order items saved/updated successfully.');
   } catch (error) {

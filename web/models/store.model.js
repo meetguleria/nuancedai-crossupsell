@@ -4,14 +4,6 @@ import sequelize from '../config/db.js';
 class Store extends Model {}
 
 Store.init({
-  user_id: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-    references: {
-      model: 'users',
-      key: 'id',
-    },
-  },
   shopify_store_id: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -36,10 +28,6 @@ Store.init({
   name: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
-  installed_at: {
-    type: DataTypes.DATE,
-    allowNull: true,
   },
 }, {
   sequelize,

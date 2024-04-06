@@ -1,5 +1,6 @@
-import shopify from '../../../shopify.js';
-import Order from './order.model.js';
+import shopify from '../shopify.js';
+import Order from '../models/order.model.js';
+import { saveOrderItems } from './orderItem.service.js';
 
 const GET_ORDERS_QUERY = `
 query getOrders($first: Int = 250) {
@@ -12,24 +13,34 @@ query getOrders($first: Int = 250) {
               node {
                 id
                 title
-                variantId
+                variant {
+                  id
+                }
                 quantity
-                price
+                originalTotalSet {
+                  shopMoney {
+                    amount
+                  }
+                }
               }
             }
           }
         name
-        totalPrice
-        createdAt: orderCreatedAt
-        financialStatus
-        fulfillmentStatus
+        totalPriceSet {
+          shopMoney {
+            amount
+          }
+        }
+        createdAt
+        displayFinancialStatus
+        displayFulfillmentStatus
         currencyCode
         customer {
           id
         }
-      shippingAddress {
-        city
-        country
+        shippingAddress {
+          city
+          country
         }
       }
     }
@@ -37,10 +48,11 @@ query getOrders($first: Int = 250) {
 }`;
 
 async function fetchOrders(session) {
-  const client = shopify.api.clients.Graphql({ session });
+  const client = new shopify.api.clients.Graphql({ session });
+  let ordersData = [];
 
   try {
-    const response = await client.query({
+    const response = await client.request({
       data: {
         query: GET_ORDERS_QUERY,
         variables: {},
@@ -52,38 +64,51 @@ async function fetchOrders(session) {
       throw new Error('GraphQL query failed');
     }
 
-    return response.body.data.orders.edges.map(edge => ({
-      shopify_order_id: edge.node.id,
-      total_price: edge.node.totalPrice,
-      order_created_at: edge.node.createdAt,
-      financial_status: edge.node.financialStatus,
-      fulfillment_status: edge.node.fulfillmentStatus,
-      currency_code: edge.node.currencyCode,
-      customer_id: edge.node.customer?.id,
-      shipping_city: edge.node.shippingAddress?.city,
-      shipping_country: edge.node.shippingAddress?.country,
-    }));
-} catch (error) {
-  console.error('Failed to fetch orders:', error);
-  throw error;
+    ordersData = response.body.data.orders.edges.map(edge => {
+      const lineItems = edge.node.lineItems.edges.map(li => ({
+        id: li.node.id,
+        title: li.node.title,
+        variantId: li.node.variantId,
+        quantity: li.node.quantity,
+        price: li.node.price,
+      }));
+
+      return {
+        shopify_order_id: edge.node.id,
+        total_price: edge.node.totalPriceSet.shopMoney.amount,
+        order_created_at: edge.node.createdAt,
+        financial_status: edge.node.displayFinancialStatus,
+        fulfillment_status: edge.node.displayFinancialStatus,
+        currency_code: edge.node.currencyCode,
+        customer_id: edge.node.customer?.id,
+        shipping_city: edge.node.shippingAddress?.city,
+        shipping_country: edge.node.shippingAddress?.country,
+        lineItems: lineItems,
+      };
+    })
+  } catch (error) {
+    console.error('Failed to fetch orders:', error);
+    throw error;
   }
+  return ordersData;
 }
 
 async function saveOrUpdatedOrders(ordersData) {
   try {
-    for (const order of ordersData) {
-      const [existing, created] = await Order.findOrCreate({
-        where: { shopify_order_id: order.shopify_order_id },
-        default: order,
+    for (const orderData of ordersData) {
+      const [existingOrder, created] = await Order.findOrCreate({
+        where: { shopify_order_id: orderData.shopify_order_id },
+        defaults: orderData,
       });
 
       if (!created) {
-        await existing.update(order);
+        await existingOrder.update(orderData);
       }
+      await saveOrderItems(existingOrder.id, orderData.lineItems);
     }
-    console.log('Order saved/updated successfully.');
+    console.log('Orders and order items saved/updated successfully.');
   } catch (error) {
-    console.error('Error saving/updating orders:', error);
+    console.error('Error saving/updating orders and order items:', error);
     throw error;
   }
 }

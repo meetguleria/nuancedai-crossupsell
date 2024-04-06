@@ -3,7 +3,7 @@
 client_id = "0004bca4723e5f82d3186cd489ff31c2"
 name = "pragmatic-shipping-app"
 handle = "pragmatic-shipping-app-2"
-application_url = "https://dose-luggage-bridges-process.trycloudflare.com"
+application_url = "https://usr-saturn-encounter-fwd.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_customers,read_discounts,read_inventory,read_orders,read_price_ru
 
 [auth]
 redirect_urls = [
-  "https://dose-luggage-bridges-process.trycloudflare.com/auth/callback",
-  "https://dose-luggage-bridges-process.trycloudflare.com/auth/shopify/callback",
-  "https://dose-luggage-bridges-process.trycloudflare.com/api/auth/callback"
+  "https://usr-saturn-encounter-fwd.trycloudflare.com/auth/callback",
+  "https://usr-saturn-encounter-fwd.trycloudflare.com/auth/shopify/callback",
+  "https://usr-saturn-encounter-fwd.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

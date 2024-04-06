@@ -1,5 +1,5 @@
 import sequelize from '../config/db.js';
-import {Order, OrderItem, Product, Store, User } from '../models/index.js';
+import {Order, OrderItem, Product, Store, User, ShopCustomer } from '../models/index.js';
 
 const setupDatabase = async () => {
   try {

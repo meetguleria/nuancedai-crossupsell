@@ -7,6 +7,7 @@ import PrivacyWebhookHandlers from "./privacy.js";
 
 import storeRoutes from './routes/storeRoutes.js';
 import initialSetupRoutes from './routes/initialSetupRoutes.js';
+import shopDataRoutes from './routes/fetchShopDataRoutes.js';
 
 const app = express();
 const PORT = parseInt(
@@ -36,6 +37,7 @@ app.use(express.json());
 
 app.use('/api/setup', initialSetupRoutes);
 app.use('/api/stores', storeRoutes);
+app.use('/api/stores', shopDataRoutes);
 
 app.use(shopify.cspHeaders());
 
