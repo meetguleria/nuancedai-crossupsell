@@ -5,11 +5,15 @@ class Product extends Model {}
 
 Product.init(
   {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
     shopify_product_id: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
-      primaryKey: true,
       validate: {
         notEmpty: true,
       },
@@ -33,10 +37,6 @@ Product.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    tags: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true,
-    },
     price: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: true,
@@ -46,11 +46,11 @@ Product.init(
       allowNull: true,
     },
     image_src: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: true,
     },
     image_alt_text: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: true,
     },
     published_at: {

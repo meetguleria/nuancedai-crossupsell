@@ -5,7 +5,7 @@ class OrderItem extends Model {}
 
 OrderItem.init(
   {
-    shopify_item_id: {
+    shop_item_id: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
@@ -24,7 +24,7 @@ OrderItem.init(
     },
     variant_id: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     quantity: {
       type: DataTypes.INTEGER,

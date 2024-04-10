@@ -1,6 +1,8 @@
 import ReactDOM from "react-dom";
 
 import App from "./App";
+import './index.css';
+import '@radix-ui/themes/styles.css';
 import { initI18n } from "./utils/i18nUtils";
 
 // Ensure that locales are loaded before rendering the app

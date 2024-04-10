@@ -1,6 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { NavigationMenu } from "@shopify/app-bridge-react";
+import { Theme } from '@radix-ui/themes';
 import Routes from "./Routes";
 
 import {
@@ -16,6 +17,7 @@ export default function App() {
   const { t } = useTranslation();
 
   return (
+  <Theme>
     <PolarisProvider>
       <BrowserRouter>
         <AppBridgeProvider>
@@ -33,5 +35,6 @@ export default function App() {
         </AppBridgeProvider>
       </BrowserRouter>
     </PolarisProvider>
+    </Theme>
   );
 }
