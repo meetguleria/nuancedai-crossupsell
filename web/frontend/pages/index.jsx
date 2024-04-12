@@ -1,7 +1,9 @@
 import { useCallback, useEffect } from 'react';
-import { Page, Card, Layout, Text, Button} from '@shopify/polaris';
-import { Flex } from '@radix-ui/themes';
+import { Page, Layout, Text} from '@shopify/polaris';
+import { Flex, Card, Button } from '@radix-ui/themes';
 import { useAuthenticatedFetch } from "../hooks";
+import RadixProductCard from '../components/RadixProductCard';
+import { CleanCard, MonoCard } from '../components/ModernMinimalCards';
 
 import '../index.css';
 export default function HomePage() {
@@ -15,9 +17,7 @@ export default function HomePage() {
   }, [fetch]);
   return (
     <Page fullWidth>
-      <Layout>
-        <Layout.Section>
-        <Card sectioned title="Welcome to NuancedAI - Product Recommendations">
+        <Card>
           <Text>
             <p>
               Enhance your store's shopping experience with AI-driven product recommendations. 
@@ -25,22 +25,27 @@ export default function HomePage() {
             </p>
           </Text>
           <div className="mt-4">
-            <button 
+            <Button 
               onClick={handleFetchDataClick} 
               className="btn btn-error"
             >
               Sync Store Data
-            </button>
+            </Button>
           </div>
         </Card>
-          </Layout.Section>
           <Layout.Section>
             <Flex align="center" gap="3">
-              <button className="custom-gradient-button">Primary Button</button>
+              <Button className="custom-gradient-button">Primary Button</Button>
               <Button>Secondary Button</Button>
             </Flex>
           </Layout.Section>
-        </Layout>
+          <Layout.Section>
+            <RadixProductCard />
+          </Layout.Section>
+          <Layout.Section>
+            <CleanCard>Simple and clean design.</CleanCard>
+            <MonoCard>Monochrome minimalist card.</MonoCard>
+          </Layout.Section>
     </Page>
   );
 }

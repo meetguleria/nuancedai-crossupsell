@@ -24,6 +24,7 @@
     "@shopify/app-bridge-react": "^3.7.7",
     "@shopify/i18next-shopify": "^0.2.9",
     "@shopify/polaris": "^13.0.0",
+    "@stitches/react": "^1.2.8",
     "@vitejs/plugin-react": "1.2.0",
     "i18next": "^23.1.0",
     "i18next-resources-to-backend": "^1.1.4",
@@ -32,6 +33,7 @@
     "react-i18next": "^13.0.0",
     "react-query": "^3.34.19",
     "react-router-dom": "^6.3.0",
+    "styled-components": "^6.1.8",
     "vite": "^4.3.9"
   },
   "devDependencies": {

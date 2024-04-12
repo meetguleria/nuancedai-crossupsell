@@ -3,7 +3,7 @@
 client_id = "0004bca4723e5f82d3186cd489ff31c2"
 name = "pragmatic-shipping-app"
 handle = "pragmatic-shipping-app-2"
-application_url = "https://lance-thanks-concrete-enrolled.trycloudflare.com"
+application_url = "https://ment-occur-qualify-tennessee.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_customers,read_discounts,read_inventory,read_orders,read_price_ru
 
 [auth]
 redirect_urls = [
-  "https://lance-thanks-concrete-enrolled.trycloudflare.com/auth/callback",
-  "https://lance-thanks-concrete-enrolled.trycloudflare.com/auth/shopify/callback",
-  "https://lance-thanks-concrete-enrolled.trycloudflare.com/api/auth/callback"
+  "https://ment-occur-qualify-tennessee.trycloudflare.com/auth/callback",
+  "https://ment-occur-qualify-tennessee.trycloudflare.com/auth/shopify/callback",
+  "https://ment-occur-qualify-tennessee.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
