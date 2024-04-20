@@ -6,7 +6,7 @@ class ShopCustomer extends Model {}
 ShopCustomer.init(
   {
     shopify_customer_id: {
-      type: DataTypes.STRING,
+      type: DataTypes.BIGINT,
       allowNull: false,
       unique: true,
       validate: {

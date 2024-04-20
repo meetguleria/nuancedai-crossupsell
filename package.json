@@ -16,7 +16,7 @@
     "@shopify/cli": "^3.56.1",
     "dotenv": "^16.4.5"
   },
-  "author": "meetg",
+  "author": "Meet Guleria",
   "private": true,
   "workspaces": [
     "extensions/*",
