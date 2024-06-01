@@ -6,7 +6,7 @@ class Order extends Model {}
 Order.init(
   {
     shopify_order_id: {
-      type: DataTypes.STRING,
+      type: DataTypes.BIGINT,
       allowNull: false,
       unique: true,
     },
@@ -15,7 +15,7 @@ Order.init(
       allowNull: false,
     },
     customer_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       allowNull: true,
       references: {
         model: "shop_customers",

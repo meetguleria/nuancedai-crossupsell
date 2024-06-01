@@ -1,14 +1,13 @@
-import './config/env.js'
+import env from './config/env.js';
 import { BillingInterval, LATEST_API_VERSION } from "@shopify/shopify-api";
 import { shopifyApp } from "@shopify/shopify-app-express";
 import { restResources } from "@shopify/shopify-api/rest/admin/2024-01";
 import { PostgreSQLSessionStorage } from "@shopify/shopify-app-session-storage-postgresql";
 
-const DATABASE_NAME = process.env.DATABASE_NAME;
-const DATABASE_USERNAME = process.env.DATABASE_USERNAME;
-const DATABASE_PASSWORD = encodeURIComponent(process.env.DATABASE_PASSWORD);
-const DATABASE_HOST = process.env.DATABASE_HOST;
-
+const DATABASE_NAME = env.databaseName;
+const DATABASE_USERNAME = env.databaseUser;
+const DATABASE_PASSWORD = env.databasePassword;
+const DATABASE_HOST = env.databaseHost;
 const postgresSessionStorage = new PostgreSQLSessionStorage(
   `postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@${DATABASE_HOST}/${DATABASE_NAME}`
 );

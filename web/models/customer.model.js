@@ -1,9 +1,9 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
 
-class ShopCustomer extends Model {}
+class Customer extends Model {}
 
-ShopCustomer.init(
+Customer.init(
   {
     shopify_customer_id: {
       type: DataTypes.STRING,
@@ -34,4 +34,4 @@ ShopCustomer.init(
   }
 );
 
-export default ShopCustomer;
+export default Customer;

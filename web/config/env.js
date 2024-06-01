@@ -12,3 +12,15 @@ const rootPath = path.join(__dirname, '../../');
 const envPath = path.join(rootPath, '.env');
 
 dotenv.config({ path: envPath });
+
+const env = {
+  databaseHost: process.env.DATABASE_HOST,
+  databasePort: process.env.DATABASE_PORT,
+  databaseUser: process.env.DATABASE_USER,
+  databasePassword: process.env.DATABASE_PASSWORD,
+  databaseName: process.env.DATABASE_NAME,
+  shopifApiKey: process.env.SHOPIFY_API_KEY,
+  shopifySecretKey: process.env.SHOPIFY_SECRET_KEY,
+};
+
+export default env;

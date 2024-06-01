@@ -1,19 +1,19 @@
-import './env.js';
+import env from './env.js';
 import { Sequelize } from 'sequelize';
 
-const DATABASE_NAME = process.env.DATABASE_NAME;
-const DATABASE_USERNAME = process.env.DATABASE_USERNAME;
-const DATABASE_PASSWORD = encodeURIComponent(process.env.DATABASE_PASSWORD);
-const DATABASE_HOST = process.env.DATABASE_HOST;
+const DATABASE_NAME = env.databaseName;
+const DATABASE_USERNAME = env.databaseUser;
+const DATABASE_PASSWORD = env.databasePassword;
+const DATABASE_HOST = env.databaseHost;
 
 const connectionUri = `postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@${DATABASE_HOST}/${DATABASE_NAME}`;
 console.log(`Connection URI: ${connectionUri}`);
 
 const sequelize = new Sequelize(connectionUri, {
-      host: DATABASE_HOST,
-      dialect: 'postgres',
-      port: 5432,
-      logging: console.log,
+  host: DATABASE_HOST,
+  dialect: 'postgres',
+  port: env.databasePort,
+  logging: console.log,
 });
 
 sequelize.authenticate()
