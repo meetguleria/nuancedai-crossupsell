@@ -1,5 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+import Customer from "./customer.model.js";
 
 class Order extends Model {}
 
@@ -18,15 +19,15 @@ Order.init(
       type: DataTypes.BIGINT,
       allowNull: true,
       references: {
-        model: "shop_customers",
-        key: "id",
+        model: Customer,
+        key: 'shopify_customer_id',
       },
     },
-    displayFinancialStatus: {
+    display_financial_status: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    displayFulfillmentStatus: {
+    display_fulfillment_status: {
       type: DataTypes.STRING,
       allowNull: true,
     },
@@ -36,24 +37,15 @@ Order.init(
     },
     order_created_at: {
       type: DataTypes.DATE,
-      allowNull: true,
+      allowNull: false,
     },
-    shipping_city: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    shipping_country: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-  },
-  {
+  }, {
     sequelize,
     modelName: "Order",
     tableName: "orders",
     timestamps: true,
     underscored: true,
-  }
-);
+  });
 
+Order.belongsTo(Customer, { foreignKey: 'customer_id' });
 export default Order;

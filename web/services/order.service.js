@@ -62,7 +62,12 @@ async function fetchOrders(session) {
 
   try {
     console.log('Sending request to Shopify...');
-    const response = await client.request(GET_ORDERS_QUERY, { variables: {} });
+    const response = await client.query({
+      data: {
+        query: GET_ORDERS_QUERY,
+        variables: { first: 250 }
+      }
+    });
 
     if (response.errors) {
       console.error('GraphQL Errors:', response.errors);

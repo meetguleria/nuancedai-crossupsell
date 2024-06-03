@@ -2,7 +2,7 @@ import env from './config/env.js';
 import { BillingInterval, LATEST_API_VERSION } from "@shopify/shopify-api";
 import { shopifyApp } from "@shopify/shopify-app-express";
 import { restResources } from "@shopify/shopify-api/rest/admin/2024-01";
-import { PostgreSQLSessionStorage } from "@shopify/shopify-app-session-storage-postgresql";
+import { PostgreSQLSessionStorage }       from "@shopify/shopify-app-session-storage-postgresql";
 
 const DATABASE_NAME = env.databaseName;
 const DATABASE_USERNAME = env.databaseUser;
@@ -16,6 +16,7 @@ const postgresSessionStorage = new PostgreSQLSessionStorage(
 // See the ensureBilling helper to learn more about billing in this template.
 const billingConfig = {
   "My Shopify One-Time Charge": {
+
     // This is an example configuration that would do a one-time charge for $5 (only USD is currently supported)
     amount: 5.0,
     currencyCode: "USD",

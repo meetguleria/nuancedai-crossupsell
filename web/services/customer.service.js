@@ -1,15 +1,15 @@
 import shopify from "../shopify.js";
-import ShopCustomer from "../models/customer.model.js";
+import Customer from "../models/customer.model.js";
 
 const GET_CUSTOMER_DETAILS_QUERY = `
-query {
-  customers(first:10) {
+query getCustomers($first: Int = 250) {
+  customers(first: $first) {
     edges {
       node {
       id
-      email
       firstName
       lastName
+      email
       ordersCount
       totalSpent
       createdAt
@@ -19,45 +19,63 @@ query {
   }
 }`;
 
-export const fetchShopifyCustomerDetails = async (session) => {
+export async function fetchCustomers(session) {
+  const client = new shopify.api.clients.Graphql({ session });
+  let customersData = [];
+
   try {
-    const client = new shopify.api.clients.Graphql({ session });
-    const response = await client.request(GET_CUSTOMER_DETAILS_QUERY);
+    const response = await client.query({
+      data: {
+        query: GET_CUSTOMER_DETAILS_QUERY,
+        variables: { first: 250 }
+      }
+    });
 
     if (response.errors) {
       console.error('GraphQL Errors:', response.errors);
       throw new Error('GraphQL query failed');
     }
 
-    if (response.data && response.data.customers) {
-      return response.data.customers.edges.map(edge => edge.node);
-    } else {
-      console.error('Unexpected GraphQL response structures:', JSON.stringify(response));
-      throw error;
-    }
-  };
+    customersData = response.data.customers.edges.map(edge => ({
+      shopify_customer_id: edge.node.id,
+      first_name: edge.node.firstName,
+      last_name: edge.node.lastName,
+      email: edge.node.email,
+      orders_count: edge.node.totalSpent,
+      created_at: edge.node.createdAt,
+      updatedAt: edge.node.updatedAt,
+    }));
+  } catch (error) {
+    console.error('Failed to fetch customers:', error);
+    throw error;
+  }
+  return customersData;
+}
 
-  export const processAndSaveCustomerDetails = async (session) => {
-    console.log('Fetched customer details:', customerDetails);
+async function saveOrUpdateCustomers(customersData) {
+  try {
+    for (const customerData of customersData) {
+      const { first_name, last_name, ...customerDetails } = customerData;
+      const name = `${first_name} ${last_name}`;
+      const [customer, created] = await Customer.findOrCreate({
+        where: { shopify_customer_id: customerDetails.shopify_customer_id },
+        defaults: { ...customerDetails, name }
+      });
 
-    try {
-      for (const customer of customerDetails) {
-        await ShopCustomer.findOrCreate({
-          where: { id: customer.id },
-          defaults: {
-            email: customer.email,
-            firstName: customer.firstName,
-            lastName: customer.lastName,
-            ordersCount: customer.totalSpent,
-            totalSpent: customer.totalSpent,
-            createdAt: customer.createdAt,
-            updatedAt: customer.updatedAt,
-          }
-        });
+      if (!created) {
+        await customer.update({ ...customerDetails, name });
       }
     }
-    console.log('Customer details saved successfully.');
+    console.log('Customers saved/updated successfully.');
   } catch (error) {
-    console.error('Error during database operations:', error);
+    console.error('Error saving/updating customers:', error);
+    throw error;
   }
+  return customersData;
+}
+
+export async function processCustomers(session) {
+  const customersData = await fetchCustomers(session);
+  await saveOrUpdateCustomers(customersData);
+  console.log('Complete process of fetching and saving customers finished successfully.');
 }
