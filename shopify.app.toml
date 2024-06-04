@@ -3,7 +3,7 @@
 client_id = "0004bca4723e5f82d3186cd489ff31c2"
 name = "NuancedAI - Recommendations"
 handle = "nuancedai-recommendations"
-application_url = "https://gary-interaction-sq-apart.trycloudflare.com"
+application_url = "https://cricket-zdnet-triple-kids.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_customers,read_discounts,read_inventory,read_orders,read_price_ru
 
 [auth]
 redirect_urls = [
-  "https://gary-interaction-sq-apart.trycloudflare.com/auth/callback",
-  "https://gary-interaction-sq-apart.trycloudflare.com/auth/shopify/callback",
-  "https://gary-interaction-sq-apart.trycloudflare.com/api/auth/callback"
+  "https://cricket-zdnet-triple-kids.trycloudflare.com/auth/callback",
+  "https://cricket-zdnet-triple-kids.trycloudflare.com/auth/shopify/callback",
+  "https://cricket-zdnet-triple-kids.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

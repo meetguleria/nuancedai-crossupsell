@@ -7,7 +7,6 @@ const DATABASE_PASSWORD = env.databasePassword;
 const DATABASE_HOST = env.databaseHost;
 
 const connectionUri = `postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@${DATABASE_HOST}/${DATABASE_NAME}`;
-console.log(`Connection URI: ${connectionUri}`);
 
 const sequelize = new Sequelize(connectionUri, {
   host: DATABASE_HOST,

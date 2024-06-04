@@ -5,6 +5,11 @@ class OrderItem extends Model {}
 
 OrderItem.init(
   {
+    id: {
+      type: DataTypes.BIGINT,
+      primaryKey: true,
+      autoIncrement: true
+    },
     shop_item_id: {
       type: DataTypes.STRING,
       allowNull: false,

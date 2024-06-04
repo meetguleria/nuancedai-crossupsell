@@ -8,23 +8,23 @@ query getOrders($first: Int = 250) {
     edges {
       node {
         id
-          lineItems(first: 250) {
-            edges {
-              node {
+        lineItems(first: 250) {
+          edges {
+            node {
+              id
+              title
+              variant {
                 id
-                title
-                variant {
-                  id
-                }
-                quantity
-                originalTotalSet {
-                  shopMoney {
-                    amount
-                  }
+              }
+              quantity
+              originalTotalSet {
+                shopMoney {
+                  amount
                 }
               }
             }
           }
+        }
         name
         totalPriceSet {
           shopMoney {
@@ -62,7 +62,7 @@ async function fetchOrders(session) {
 
   try {
     console.log('Sending request to Shopify...');
-    const response = await client.query({
+    const response = await client.request({
       data: {
         query: GET_ORDERS_QUERY,
         variables: { first: 250 }
@@ -74,6 +74,9 @@ async function fetchOrders(session) {
       throw new Error('GraphQL query failed');
     }
 
+    if (!response.data || !response.data.orders) {
+      throw new Error('Unexpected GraphQL response structure');
+    }
     console.log('Processing fetched orders...');
     ordersData = response.data.orders.edges.map(edge => {
       const lineItems = edge.node.lineItems.edges.map(li => {

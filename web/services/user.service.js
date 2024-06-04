@@ -1,5 +1,6 @@
 import shopify from "../shopify.js";
 import User from '../models/user.model.js';
+import Store from '../models/store.model.js';
 
 const GET_USER_DETAILS_QUERY = `
 query {
@@ -16,7 +17,12 @@ query {
 export const fetchShopUserDetails = async (session) => {
   try {
     const client = new shopify.api.clients.Graphql({ session });
-    const response = await client.request(GET_USER_DETAILS_QUERY, {});
+    const response = await client.request({
+      data: {
+        query: GET_USER_DETAILS_QUERY,
+        variables: {},
+      }
+    });
 
     if (response.errors) {
       console.error("GraphQL Errors:", response.errors);
@@ -77,4 +83,4 @@ export const processAndSaveUserDetails = async (session) => {
     console.error('Error during database operation:', error);
     throw error;
   }
-}
+};

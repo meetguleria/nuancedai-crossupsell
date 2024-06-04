@@ -24,7 +24,7 @@ export async function fetchCustomers(session) {
   let customersData = [];
 
   try {
-    const response = await client.query({
+    const response = await client.request({
       data: {
         query: GET_CUSTOMER_DETAILS_QUERY,
         variables: { first: 250 }

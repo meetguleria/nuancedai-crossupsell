@@ -4,13 +4,17 @@ import Customer from "./customer.model.js";
 
 class Order extends Model {}
 
-Order.init(
-  {
+Order.init({
+    id: {
+      type: DataTypes.BIGINT,
+      primaryKey: true,
+      autoIncrement: true
+    },
     shopify_order_id: {
       type: DataTypes.BIGINT,
       allowNull: false,
       unique: true,
-    },
+      },
     total_price: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,

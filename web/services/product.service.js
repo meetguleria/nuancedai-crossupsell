@@ -32,12 +32,22 @@ query getProducts($first: Int = 250) {
   }
 }`;
 
+const extractIdFromGid = (gid) => {
+  if (!gid) {
+    return null;
+  }
+  const matches = gid.match(/gid:\/\/shopify\/[A-Za-z]+\/(\d+)/);
+  return matches ? matches[1] : null;
+};
+
 export async function fetchProducts(session) {
   const client = new shopify.api.clients.Graphql({ session });
   let productsData = [];
 
   try {
-    const response = await client.request(GET_PRODUCTS_QUERY, { variables: {} });
+    const response = await client.request({
+      
+    });
 
       if (response.errors) {
         console.error('GraphQL Errors:', response.errors);
@@ -74,10 +84,13 @@ async function saveOrUpdateProducts(productsData) {
         defaults: productDetails
       });
 
+      if (!created) {
+        await product.update(productDetails);
+      }
       // Hand tags if present
       if (tags && tags.length) {
         // If tags is a string, split into an array; otherwise, use it directly
-        const tagNames = typeof tags === 'string' ? tags.split(', ') : tags;
+        const tagNames = Array.isArray(tags) ? tags : tags.split(', ');
         for (const tagName of tagNames) {
           const [tag] = await Tag.findOrCreate({ where: { name: tagName } });
           // Create association if it doesn't exist
@@ -92,8 +105,7 @@ async function saveOrUpdateProducts(productsData) {
         console.error('Error saving/updating products:', error);
         throw error;
     }
-    return productsData;
-}
+  }
 
 export async function processProducts(session) {
   const productsData = await fetchProducts(session);
