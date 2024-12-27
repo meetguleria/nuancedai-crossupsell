@@ -1,15 +1,15 @@
 import { processAndSaveShopDetails } from "../services/store.service.js";
 
-export async function handleShopInstallation(req, res) {
+export async function resyncStoreDetails(req, res) {
   try {
     const session = res.locals.shopify.session;
-    const savedShopDetails = await processAndSaveShopDetails(session);
-
+    const updatedStoreDetails = await processAndSaveShopDetails(session);
     res.status(200).json({
-      message: "Shop details fetched successfully.",
-      shopDetails: savedShopDetails,
+      message: "Store details updated successfully.",
+      storeDetails: updatedStoreDetails,
     });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error("Error re-syncing store details:", error);
+    res.status(500).json({ error: "Failed to re-sync store details." });
   }
 }

@@ -1,6 +1,5 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
-import Product from "./product.model.js";
 
 class ProductRelationship extends Model {}
 
@@ -12,20 +11,12 @@ ProductRelationship.init(
       autoIncrement: true,
     },
     productId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
-      references: {
-        model: Product,
-        key: "id",
-      },
     },
     relatedProductId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
-      references: {
-        model: Product,
-        key: "id",
-      },
     },
     type: {
       type: DataTypes.STRING,
@@ -41,6 +32,22 @@ ProductRelationship.init(
     source: {
       type: DataTypes.STRING,
       defaultValue: "default",
+    },
+    triggerLocation: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "pdp",
+      validate: {
+        isIn: [["pdp", "cart", "checkout", "post-purchase"]],
+      },
+    },
+    displayType: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "popup",
+      validate: {
+        isIn: [["popup", "inline", "banner", "sidebar"]],
+      },
     },
   },
   {

@@ -23,6 +23,7 @@ export async function fetchShopUserDetails(session) {
     email: response.data.shop.email,
     myshopifyDomain: response.data.shop.myshopifyDomain,
     primaryDomainUrl: response.data.shop.primaryDomain?.url,
+    rawShopifyData: response.data.shop, 
   };
 }
 
@@ -31,18 +32,46 @@ export async function processAndSaveUserDetails(session) {
   const [user, created] = await User.findOrCreate({
     where: { myshopify_domain: userDetails.myshopifyDomain },
     defaults: {
-      shop_name: userDetails.shopName,
       email: userDetails.email,
       myshopify_domain: userDetails.myshopifyDomain,
+      shop_name: userDetails.shopName,
       primary_domain_url: userDetails.primaryDomainUrl,
+      shopify_data: userDetails.rawShopifyData,
     },
   });
   if (!created) {
     await user.update({
+      email: userDetails.email,
       shop_name: userDetails.shopName,
       primary_domain_url: userDetails.primaryDomainUrl,
-      myshopifyDomain: userDetails.myshopifyDomain,
+      shopify_data: userDetails.rawShopifyData,
     });
   }
   return user.get({ plain: true });
+}
+
+export async function getUserDetails(session) {
+  const user = await User.findOne({ where: { myshopify_domain: session.shop } });
+  if (!user) {
+    throw new Error('User not found');
+  }
+  return user;
+}
+
+export async function updateUserSettings(session, newSettings) {
+  const user = await User.findOne({ where: { myshopify_domain: session.shop } });
+  if (!user) {
+    throw new Error('User not found');
+  }
+  await user.update({ app_settings: newSettings });
+  return user;
+}
+
+export async function updateDataConsent(session, consent) {
+  const user = await User.findOne({ where: { myshopify_domain: session.shop } });
+  if (!user) {
+    throw new Error('User not found');
+  }
+  await user.update({ data_consent: consent });
+  return user;
 }

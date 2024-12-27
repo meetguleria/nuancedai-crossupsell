@@ -1,4 +1,7 @@
-import './config/env.js';
+import dotenv from 'dotenv';
+dotenv.config();
+
+// Import necessary modules and configurations here
 import { join } from "path";
 import { readFileSync } from "fs";
 import express from "express";
@@ -7,7 +10,8 @@ import PrivacyWebhookHandlers from "./privacy.js";
 
 import storeRoutes from './routes/storeRoutes.js';
 import initialSetupRoutes from './routes/initialSetupRoutes.js';
-import shopDataRoutes from './routes/fetchShopDataRoutes.js';
+import productRelationshipRoutes from './routes/productRelationshipRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 const PORT = parseInt(
@@ -37,7 +41,8 @@ app.use(express.json());
 
 app.use('/api/setup', initialSetupRoutes);
 app.use('/api/stores', storeRoutes);
-app.use('/api/stores', shopDataRoutes);
+app.use('/api/product-relationships', productRelationshipRoutes);
+app.use('/api/users', userRoutes);
 
 app.use(shopify.cspHeaders());
 

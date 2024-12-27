@@ -1,8 +1,8 @@
 import express from 'express';
-import { handleShopInstallation } from '../controllers/storeController.js';
+import { resyncStoreDetails } from '../controllers/storeController.js';
 
 const router = express.Router();
 
-router.get('/store', handleShopInstallation);
+router.get('/store/resync', resyncStoreDetails);
 
 export default router;
