@@ -25,8 +25,8 @@ export default function HomePage() {
             </p>
           </Text>
           <div className="mt-4">
-            <button 
-              onClick={handleFetchDataClick} 
+            <button
+              onClick={handleFetchDataClick}
               className="btn btn-error"
             >
               Sync Store Data

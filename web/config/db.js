@@ -19,7 +19,7 @@ console.log(`Connecting to database at host: ${DATABASE_HOST} on port: ${DATABAS
 // Initialize Sequelize
 const sequelize = new Sequelize(connectionUri, {
   dialect: 'postgres',
-  logging: process.env.NODE_ENV === 'development' ? console.log : false, // Log only in development
+  logging: process.env.NODE_ENV === 'development' ? console.log : false,
 });
 
-export default sequelize;
+export { sequelize, connectionUri };

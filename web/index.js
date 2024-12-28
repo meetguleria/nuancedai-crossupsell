@@ -1,10 +1,17 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-// Import necessary modules and configurations here
 import { join } from "path";
 import { readFileSync } from "fs";
 import express from "express";
+
+console.log('DATABASE_HOST:', process.env.DATABASE_HOST);
+// Debugging Logs to verify variables are loaded
+console.log('DATABASE_NAME:', process.env.DATABASE_NAME);
+console.log('DATABASE_USER:', process.env.DATABASE_USER);
+console.log('DATABASE_PASSWORD:', process.env.DATABASE_PASSWORD);
+console.log('DATABASE_HOST:', process.env.DATABASE_HOST);
+
 import shopify from "./shopify.js";
 import PrivacyWebhookHandlers from "./privacy.js";
 

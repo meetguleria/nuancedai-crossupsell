@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import { Sequelize } from 'sequelize';
-import { Product, Store, User, Tag, ProductTag, ProductRelationship } from '../models/index.js';
+import { Store, User, ProductRelationship } from '../models/index.js';
 
 // Load environment variables
 dotenv.config();
