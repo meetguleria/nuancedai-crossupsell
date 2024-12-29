@@ -29,6 +29,11 @@ Store.init({
     type: DataTypes.STRING,
     allowNull: false,
   },
+  hasCompletedOnboarding: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
 }, {
   sequelize,
   modelName: 'Store',

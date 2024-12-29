@@ -29,25 +29,39 @@ export async function fetchShopUserDetails(session) {
 
 export async function processAndSaveUserDetails(session) {
   const userDetails = await fetchShopUserDetails(session);
-  const [user, created] = await User.findOrCreate({
-    where: { myshopify_domain: userDetails.myshopifyDomain },
-    defaults: {
-      email: userDetails.email,
-      myshopify_domain: userDetails.myshopifyDomain,
-      shop_name: userDetails.shopName,
-      primary_domain_url: userDetails.primaryDomainUrl,
-      shopify_data: userDetails.rawShopifyData,
-    },
-  });
-  if (!created) {
-    await user.update({
-      email: userDetails.email,
-      shop_name: userDetails.shopName,
-      primary_domain_url: userDetails.primaryDomainUrl,
-      shopify_data: userDetails.rawShopifyData,
+
+  // Start a transaction
+  const transaction = await User.sequelize.transaction();
+
+  try {
+    const [user, created] = await User.findOrCreate({
+      where: { myshopify_domain: userDetails.myshopifyDomain },
+      defaults: {
+        email: userDetails.email,
+        myshopify_domain: userDetails.myshopifyDomain,
+        shop_name: userDetails.shopName,
+        primary_domain_url: userDetails.primaryDomainUrl,
+        shopify_data: userDetails.rawShopifyData,
+      },
+      transaction,
     });
+    if (!created) {
+      await user.update({
+        email: userDetails.email,
+        shop_name: userDetails.shopName,
+        primary_domain_url: userDetails.primaryDomainUrl,
+        shopify_data: userDetails.rawShopifyData,
+      }, { transaction });
+    }
+
+    // Commit the transaction
+    await transaction.commit();
+    return user.get({ plain: true });
+  } catch (error) {
+    // Rollback the transaction
+    await transaction.rollback();
+    throw error;
   }
-  return user.get({ plain: true });
 }
 
 export async function getUserDetails(session) {
