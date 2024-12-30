@@ -1,4 +1,5 @@
 import express from 'express';
+import shopify from '../shopify.js';
 import {
   createProductRelationship,
   getProductRelationships,
@@ -7,6 +8,7 @@ import {
 } from '../controllers/productRelationshipController.js';
 
 const router = express.Router();
+router.use(shopify.validateAuthenticatedSession());
 
 router.post('/product-relationships', createProductRelationship);
 router.get('/product-relationships/:productId', getProductRelationships);

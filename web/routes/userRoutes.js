@@ -1,4 +1,5 @@
 import express from 'express';
+import shopify from '../shopify.js';
 import {
   getUserDetailsController,
   updateUserSettingsController,
@@ -6,6 +7,8 @@ import {
 } from '../controllers/userController.js';
 
 const router = express.Router();
+
+router.use(shopify.validateAuthenticatedSession());
 
 router.get('/user', getUserDetailsController);
 router.put('/user/settings', updateUserSettingsController);

@@ -5,13 +5,6 @@ import { join } from "path";
 import { readFileSync } from "fs";
 import express from "express";
 
-console.log('DATABASE_HOST:', process.env.DATABASE_HOST);
-// Debugging Logs to verify variables are loaded
-console.log('DATABASE_NAME:', process.env.DATABASE_NAME);
-console.log('DATABASE_USER:', process.env.DATABASE_USER);
-console.log('DATABASE_PASSWORD:', process.env.DATABASE_PASSWORD);
-console.log('DATABASE_HOST:', process.env.DATABASE_HOST);
-
 import shopify from "./shopify.js";
 import PrivacyWebhookHandlers from "./privacy.js";
 
@@ -58,10 +51,6 @@ app.use("/*", shopify.ensureInstalledOnShop(), async (_req, res, _next) => {
     .status(200)
     .set("Content-Type", "text/html")
     .send(readFileSync(join(STATIC_PATH, "index.html")));
-});
-
-app.use('*', (req, res) => {
-  res.sendFile(join(STATIC_PATH, 'index.html'));
 });
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

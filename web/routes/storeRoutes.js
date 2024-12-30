@@ -1,7 +1,10 @@
 import express from 'express';
-import { resyncStoreDetails } from '../controllers/storeController.js';
+import shopify from '../shopify.js';
+import { resyncStoreDetails, getOnboardingStatusController, completeOnboardingController } from '../controllers/storeController.js';
 
 const router = express.Router();
+
+router.use(shopify.validateAuthenticatedSession());
 
 router.get('/store/resync', resyncStoreDetails);
 
