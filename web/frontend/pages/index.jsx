@@ -19,24 +19,22 @@ export default function HomePage() {
         <Layout.Section>
         <Card sectioned title="Welcome to NuancedAI - Product Recommendations">
           <Text>
-            <p>
-              Enhance your store's shopping experience with AI-driven product recommendations. 
+              Enhance your store's shopping experience with AI-driven product recommendations.
               Ready to start? Sync your store data now.
-            </p>
           </Text>
           <div className="mt-4">
-            <button
+            <Button
               onClick={handleFetchDataClick}
               className="btn btn-error"
             >
               Sync Store Data
-            </button>
+            </Button>
           </div>
         </Card>
           </Layout.Section>
           <Layout.Section>
             <Flex align="center" gap="3">
-              <button className="custom-gradient-button">Primary Button</button>
+              <Button className="custom-gradient-button">Primary Button</Button>
               <Button>Secondary Button</Button>
             </Flex>
           </Layout.Section>
