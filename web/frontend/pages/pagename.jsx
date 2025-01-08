@@ -1,20 +1,18 @@
 import { Card, Page, Layout, TextContainer, Text } from "@shopify/polaris";
 import { TitleBar } from "@shopify/app-bridge-react";
-import { useTranslation } from "react-i18next";
 
 export default function PageName() {
-  const { t } = useTranslation();
   return (
     <Page>
       <TitleBar
-        title={t("PageName.title")}
+        title="Page Title"
         primaryAction={{
-          content: t("PageName.primaryAction"),
+          content: "Primary Action",
           onAction: () => console.log("Primary action"),
         }}
         secondaryActions={[
           {
-            content: t("PageName.secondaryAction"),
+            content: "Secondary Action",
             onAction: () => console.log("Secondary action"),
           },
         ]}
@@ -23,28 +21,28 @@ export default function PageName() {
         <Layout.Section>
           <Card sectioned>
             <Text variant="headingMd" as="h2">
-              {t("PageName.heading")}
+              Page Heading
             </Text>
             <TextContainer>
-              <p>{t("PageName.body")}</p>
+              <p>This is the body content of the page.</p>
             </TextContainer>
           </Card>
           <Card sectioned>
             <Text variant="headingMd" as="h2">
-              {t("PageName.heading")}
+              Page Heading
             </Text>
             <TextContainer>
-              <p>{t("PageName.body")}</p>
+              <p>This is the body content of the page.</p>
             </TextContainer>
           </Card>
         </Layout.Section>
         <Layout.Section secondary>
           <Card sectioned>
             <Text variant="headingMd" as="h2">
-              {t("PageName.heading")}
+              Page Heading
             </Text>
             <TextContainer>
-              <p>{t("PageName.body")}</p>
+              <p>This is the body content of the page.</p>
             </TextContainer>
           </Card>
         </Layout.Section>

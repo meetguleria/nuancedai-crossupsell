@@ -1,45 +1,12 @@
-import { useEffect, useState } from "react";
-import { BrowserRouter } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { NavigationMenu } from "@shopify/app-bridge-react";
-import { Theme } from '@radix-ui/themes';
-import Routes from "./Routes";
-
-import {
-  AppBridgeProvider,
-  QueryProvider,
-  PolarisProvider,
-} from "./components";
-
-import OnboardingModal from "./components/OnboardingModal";
+import React from "react"; // Make sure React is explicitly imported
+console.log("DEBUG: Entering App.jsx (file-level)...");
 
 export default function App() {
-  const pages = import.meta.globEager("./pages/**/!(*.test.[jt]sx)*.([jt]sx)");
-  const { t } = useTranslation();
+  console.log("DEBUG: Inside App() function..."); // (2)
 
   return (
-  <Theme>
-    <PolarisProvider>
-      <BrowserRouter>
-        <AppBridgeProvider>
-          <QueryProvider>
-              <NavigationMenu
-                navigationLinks={[
-                  {
-                    label: t("NavigationMenu.pageName"),
-                    destination: "/pagename",
-                  },
-                ]}
-              />
-            <Routes pages={pages} />
-            <OnboardingModal
-              isOpen={true}
-              onClose={() => console.log("Modal closed")}
-              />
-          </QueryProvider>
-        </AppBridgeProvider>
-      </BrowserRouter>
-    </PolarisProvider>
-    </Theme>
+    <div style={{ margin: "100px" }}>
+      <h1>Hello from minimal App.jsx!</h1>
+    </div>
   );
 }

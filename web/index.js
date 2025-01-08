@@ -4,6 +4,7 @@ dotenv.config();
 import { join } from "path";
 import { readFileSync } from "fs";
 import express from "express";
+import serveStatic from "serve-static";
 
 import shopify from "./shopify.js";
 import PrivacyWebhookHandlers from "./privacy.js";
@@ -24,6 +25,10 @@ const STATIC_PATH =
     ? `${process.cwd()}/frontend/dist`
     : `${process.cwd()}/frontend/`;
 
+app.use(shopify.cspHeaders());
+
+app.use(express.json());
+
 // Set up Shopify authentication and webhook handling
 app.get(shopify.config.auth.path, shopify.auth.begin());
 
@@ -34,23 +39,26 @@ app.post(
   shopify.processWebhooks({ webhookHandlers: PrivacyWebhookHandlers })
 );
 
-app.use(express.static(STATIC_PATH));
-
 app.use("/api/*", shopify.validateAuthenticatedSession());
-app.use(express.json());
 
 app.use('/api/setup', initialSetupRoutes);
 app.use('/api/stores', storeRoutes);
 app.use('/api/product-relationships', productRelationshipRoutes);
 app.use('/api/users', userRoutes);
 
-app.use(shopify.cspHeaders());
+// Serve static files
+app.use(serveStatic(STATIC_PATH, { index: false }));
 
-app.use("/*", shopify.ensureInstalledOnShop(), async (_req, res, _next) => {
+// Catch-all route for frontend
+app.use("/*", shopify.ensureInstalledOnShop(), async (_req, res) => {
   return res
     .status(200)
     .set("Content-Type", "text/html")
-    .send(readFileSync(join(STATIC_PATH, "index.html")));
+    .send(
+      readFileSync(join(STATIC_PATH, "index.html"))
+        .toString()
+        .replace("%VITE_SHOPIFY_API_KEY%", process.env.SHOPIFY_API_KEY || "")
+    );
 });
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

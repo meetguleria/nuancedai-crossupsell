@@ -1,17 +1,8 @@
-import { useMemo, useState } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Provider } from "@shopify/app-bridge-react";
 import { Banner, Layout, Page } from "@shopify/polaris";
 
-/**
- * A component to configure App Bridge.
- * @desc A thin wrapper around AppBridgeProvider that provides the following capabilities:
- *
- * 1. Ensures that navigating inside the app updates the host URL.
- * 2. Configures the App Bridge Provider, which unlocks functionality provided by the host.
- *
- * See: https://shopify.dev/apps/tools/app-bridge/getting-started/using-react
- */
 export function AppBridgeProvider({ children }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -29,27 +20,36 @@ export function AppBridgeProvider({ children }) {
     [history, location]
   );
 
-  // The host may be present initially, but later removed by navigation.
-  // By caching this in state, we ensure that the host is never lost.
-  // During the lifecycle of an app, these values should never be updated anyway.
-  // Using state in this way is preferable to useMemo.
-  // See: https://stackoverflow.com/questions/60482318/version-of-usememo-for-caching-a-value-that-will-never-change
+  // Add console log to verify host and apiKey
+  useEffect(() => {
+    const host = new URLSearchParams(location.search).get("host");
+    console.log("AppBridgeProvider: host =", host);
+    console.log("AppBridgeProvider: VITE_SHOPIFY_API_KEY =", import.meta.env.VITE_SHOPIFY_API_KEY);
+  }, [location.search]);
+
   const [appBridgeConfig] = useState(() => {
     const host =
       new URLSearchParams(location.search).get("host") ||
       window.__SHOPIFY_DEV_HOST;
 
+    console.log("AppBridgeProvider Initial host:", host);
+
     window.__SHOPIFY_DEV_HOST = host;
 
     return {
       host,
-      apiKey: process.env.SHOPIFY_API_KEY,
+      apiKey: import.meta.env.VITE_SHOPIFY_API_KEY,
       forceRedirect: true,
     };
   });
 
-  if (!process.env.SHOPIFY_API_KEY || !appBridgeConfig.host) {
-    const bannerProps = !process.env.SHOPIFY_API_KEY
+  // Log appBridgeConfig
+  useEffect(() => {
+    console.log("AppBridgeProvider Config:", appBridgeConfig);
+  }, [appBridgeConfig]);
+
+  if (!import.meta.env.VITE_SHOPIFY_API_KEY || !appBridgeConfig.host) {
+    const bannerProps = !import.meta.env.VITE_SHOPIFY_API_KEY
       ? {
           title: "Missing Shopify API Key",
           children: (
@@ -70,6 +70,11 @@ export function AppBridgeProvider({ children }) {
             </>
           ),
         };
+
+    console.error("AppBridgeProvider: Missing required config.", {
+      apiKey: import.meta.env.VITE_SHOPIFY_API_KEY,
+      host: appBridgeConfig.host,
+    });
 
     return (
       <Page narrowWidth>

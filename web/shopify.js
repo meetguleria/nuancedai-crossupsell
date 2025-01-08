@@ -2,9 +2,8 @@ import { BillingInterval, LATEST_API_VERSION } from "@shopify/shopify-api";
 import { shopifyApp } from "@shopify/shopify-app-express";
 import { restResources } from "@shopify/shopify-api/rest/admin/2024-01";
 import { PostgreSQLSessionStorage } from "@shopify/shopify-app-session-storage-postgresql";
-import { connectionUri } from './config/db.js'; // Import the connection URI
+import { connectionUri } from './config/db.js';
 
-console.log('shopify.js - connectionUri:', connectionUri);
 
 const DATABASE_NAME = process.env.DATABASE_NAME;
 const DATABASE_USERNAME = process.env.DATABASE_USER;
