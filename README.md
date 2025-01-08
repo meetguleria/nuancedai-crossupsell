@@ -1,4 +1,3 @@
----
 **NuancedAI - CrossUpsell** is a Shopify app designed to help merchants increase revenue through targeted cross-sell and upsell recommendations. It leverages Shopify’s APIs for data access and a PostgreSQL database (via Sequelize) to store critical application data such as store details, user settings, and product relationships.
 
 ---
